@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1013" />
+    <meta
+      name="description"
+      content="参数化 3D 角度连接器生成器：连接角度、板厚、臂宽、臂长、连接数量、加强筋均可调，支持导出 STL / 3MF 并导入 Bambu Lab。"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0f12'/%3E%3Cpath d='M8 24V10h6v8h10v6z' fill='%232ee88a'/%3E%3C/svg%3E"
+    />
+    <title>Angle Connector Studio · 3D 角度连接器生成器</title>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="panel">
+        <header class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="22" height="22">
+              <path d="M6 26V8h7v11h13v7z" fill="currentColor" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>Angle Connector <span>Studio</span></h1>
+            <p>参数化角度连接器 · 为 FDM 打印优化</p>
+          </div>
+        </header>
+
+        <div class="presets" id="presets" role="group" aria-label="预设方案"></div>
+
+        <div class="panel-scroll" id="controls"></div>
+
+        <footer class="export">
+          <div class="export-primary">
+            <button class="btn btn-primary" id="btn-3mf">
+              <span class="btn-icon">⬇</span>
+              下载 3MF · Bambu Lab
+            </button>
+            <button class="btn btn-ghost" id="btn-bambu" title="尝试通过 bambustudio:// 唤起本机 Bambu Studio">
+              唤起 Bambu Studio
+            </button>
+          </div>
+          <div class="export-secondary">
+            <button class="btn btn-secondary" id="btn-stl">下载 STL</button>
+            <button class="btn btn-secondary" id="btn-link" title="复制带当前参数的分享链接">复制参数链接</button>
+          </div>
+          <p class="export-note">
+            3MF 内含毫米单位与封闭流形网格，双击文件即可在 Bambu Studio / OrcaSlicer 中打开切片。
+          </p>
+        </footer>
+      </aside>
+
+      <main class="stage">
+        <div class="viewport" id="viewport"></div>
+
+        <div class="hud hud-top-left">
+          <div class="hint">
+            <span class="dot"></span>
+            拖动旋转 · 滚轮缩放 · 右键平移
+          </div>
+        </div>
+
+        <div class="hud hud-top-right">
+          <button class="icon-btn" id="btn-view-reset" title="重置视角" aria-label="重置视角">
+            <svg viewBox="0 0 24 24" width="17" height="17">
+              <path
+                d="M12 5a7 7 0 1 0 6.7 9M12 5V2M12 5l3-3M12 5 9 2"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <button class="icon-btn is-active" id="btn-edges" title="轮廓线" aria-label="切换轮廓线" aria-pressed="true">
+            <svg viewBox="0 0 24 24" width="17" height="17">
+              <path
+                d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5zM4 7.5 12 12l8-4.5M12 12v9"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="hud hud-bottom-left">
+          <section class="spec" aria-live="polite">
+            <h2>模型信息</h2>
+            <dl>
+              <div><dt>外形尺寸</dt><dd id="stat-size">—</dd></div>
+              <div><dt>体积</dt><dd id="stat-volume">—</dd></div>
+              <div><dt>PLA 估重</dt><dd id="stat-weight">—</dd></div>
+              <div><dt>耗材长度</dt><dd id="stat-filament">—</dd></div>
+              <div><dt>三角面</dt><dd id="stat-tris">—</dd></div>
+            </dl>
+            <div class="bed-badge" id="bed-badge">热床 256 × 256 mm</div>
+          </section>
+        </div>
+
+        <div class="hud hud-bottom-right">
+          <div class="notes" id="notes" hidden></div>
+        </div>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p>正在初始化几何内核…</p>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
